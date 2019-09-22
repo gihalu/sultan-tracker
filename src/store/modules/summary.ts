@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { cloneDeep, fromPairs, get, head, map, max, startCase, tail } from 'lodash'
+import { compact, concat, fromPairs, get, head, map, max, startCase, tail } from 'lodash'
 
 interface ValueRange {
   majorDimension: string,
@@ -99,6 +99,19 @@ const actions = {
         commit('SetSummaryData', data)
       })
       .catch((error: any) => console.error({ error }))
+  },
+
+  NewSummaryRecords: ({ commit, getters, state }: ActionParameters) => {
+    const sultans: { name: string, active: boolean }[] = getters.sultans
+    const date = prompt('Please enter the date for these records')
+    if (!date) return
+    const newValues: any = compact(map(sultans, sultan => {
+      if (!sultan.active) return
+      const score = prompt(`Please enter the score for ${sultan.name}`)
+      return [sultan.name, date, score]
+    }))
+    const newSummaryData = concat(state.summaryData, newValues)
+    commit('SetSummaryData', newSummaryData)
   },
 }
 

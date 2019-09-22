@@ -1,10 +1,17 @@
 <template>
-  <q-page class="flex flex-center">
-    <summary-table
-      :columns="columns"
-      :rows="rows"
-      v-if="displayTable"
-    />
+  <q-page class="flex flex-center q-pa-lg">
+    <div v-if="displayTable">
+      <q-btn
+        class="q-mb-md"
+        color="primary"
+        label="New Records"
+        @click="NewSummaryRecords"
+      />
+      <summary-table
+        :columns="columns"
+        :rows="rows"
+      />
+    </div>
     <!-- <div v-if="rows">{{ rows }}</div> -->
     <div v-else>
       <span class="text-h5 q-pt-sm">Loading Data</span>
@@ -19,6 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'vuex'
 import { get, set } from 'lodash'
 import SummaryTable from './SummaryTable.vue'
 
@@ -36,6 +44,7 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions(['NewSummaryRecords']),
     SignIn () {
       const gapi = get(this, '$gapi')
       gapi
