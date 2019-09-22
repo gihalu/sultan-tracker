@@ -18,7 +18,14 @@ import {
   QList,
   QItem,
   QItemSection,
-  QItemLabel
+  QItemLabel,
+  QTable,
+  QTh,
+  QToggle,
+  QTr,
+  QTd,
+  QSpinnerGrid,
+  Ripple
 } from 'quasar'
 
 Vue.use(Quasar, {
@@ -36,9 +43,16 @@ Vue.use(Quasar, {
     QList,
     QItem,
     QItemSection,
-    QItemLabel
+    QItemLabel,
+    QTable,
+    QTh,
+    QToggle,
+    QTr,
+    QTd,
+    QSpinnerGrid
   },
   directives: {
+    Ripple
   },
   plugins: {
   }

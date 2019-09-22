@@ -1,6 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="glossy">
+    <q-header
+      elevated
+      class="glossy"
+    >
       <q-toolbar>
         <q-btn
           flat
@@ -12,10 +15,9 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Drunken Sultan Tracker
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <sign-in />
       </q-toolbar>
     </q-header>
 
@@ -26,7 +28,10 @@
     >
       <q-list>
         <q-item-label header>Navigation</q-item-label>
-        <q-item to="/" exact>
+        <q-item
+          to="/"
+          exact
+        >
           <q-item-section avatar>
             <q-icon name="home" />
           </q-item-section>
@@ -34,59 +39,15 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/about" exact>
+        <q-item
+          to="/sultans"
+          exact
+        >
           <q-item-section avatar>
-            <q-icon name="info" />
+            <q-icon name="people" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>About</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://github.com/quasarframework/">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="forum" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://twitter.com/quasarframework">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
+            <q-item-label>Sultans</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -98,14 +59,25 @@
   </q-layout>
 </template>
 
-<script>
-export default {
-  name: 'LayoutDefault',
+<script lang="ts">
+import Vue from 'vue'
+import { set } from 'lodash'
+import SignIn from '../components/SignIn.vue'
 
+export default Vue.extend({
+  name: 'LayoutDefault',
   data () {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop
     }
+  },
+  computed: {},
+  methods: {},
+  created () {
+    set(window, 'store', this.$store)
+  },
+  components: {
+    SignIn
   }
-}
+})
 </script>
