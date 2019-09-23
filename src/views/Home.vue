@@ -18,7 +18,7 @@
       <q-spinner-grid
         class="q-ml-sm"
         color="primary"
-        size="2em"
+        size="1.5rem"
       />
     </div>
   </q-page>

@@ -1,12 +1,5 @@
-import Vue from 'vue'
-import { concat, cloneDeep, findIndex, fromPairs, get, has, head, isMatch, map, startCase, tail } from 'lodash'
-import { Action } from 'vuex'
-
-interface ValueRange {
-  majorDimension: string,
-  range: string,
-  values: string[][]
-}
+import { concat, cloneDeep, findIndex, head, tail } from 'lodash'
+import { ValueRange } from './gapi'
 
 class SultanState {
   range: string = 'sultans!A1:Z999'
