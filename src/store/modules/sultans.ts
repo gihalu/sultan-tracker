@@ -70,6 +70,7 @@ const actions = {
     commit('SetSultans', sultanValues)
     dispatch('UpdateSultans')
   },
+
   UpdateSultans: ({ state, getters }: ActionParameters) => {
     return getters.gapi.request({
       path: getters.gapiUrl({ parameters: state.range }),

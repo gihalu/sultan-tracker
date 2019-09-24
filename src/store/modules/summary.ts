@@ -69,7 +69,7 @@ const actions = {
       .catch((error: any) => console.error({ error }))
   },
 
-  NewSummaryRecords: ({ commit, getters, state }: ActionParameters) => {
+  NewSummaryRecords: ({ commit, dispatch, getters, state }: ActionParameters) => {
     const sultans: { name: string, active: boolean }[] = getters.sultans
     const date = prompt('Please enter the date for these records', getters.summaryDateSuggestion)
     if (!date) return
@@ -82,7 +82,21 @@ const actions = {
     if (!state.summaryData) return
     const newSummaryValues = concat(state.summaryData.values, newValues)
     commit('SetSummary', newSummaryValues)
+    dispatch('UpdateSummary')
   },
+
+  UpdateSummary: ({ state, getters }: ActionParameters) => {
+    return getters.gapi.request({
+      path: getters.gapiUrl({ parameters: state.range }),
+      method: 'PUT',
+      params: {
+        valueInputOption: 'RAW',
+      },
+      body: state.summaryData
+    })
+      .then((response: any) => console.log({ response }))
+      .catch((error: any) => console.error({ error }))
+  }
 }
 
 // mutations
