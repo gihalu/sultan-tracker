@@ -7,7 +7,7 @@
       @click="SignIn"
     />
     <span v-else>
-      Welcome {{ name }} : <a
+      {{ name }} : <a
         href="/"
         click.prevent="SignOut"
       >sign out</a>

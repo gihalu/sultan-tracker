@@ -1,4 +1,5 @@
-import { compact, concat, fromPairs, get, head, map, max, startCase, tail } from 'lodash'
+import { compact, concat, filter, fromPairs, get, head, last, map, max, sortBy, startCase, tail } from 'lodash'
+import { date } from 'quasar'
 import { ValueRange } from './gapi'
 
 interface ActionParameters {
@@ -19,11 +20,25 @@ const state = new SummaryState()
 // getters
 const getters = {
 
+  latestScoreBySultan: (state: SummaryState, getters: any) => (sultan: string) => {
+    const filteredRows = filter(getters.summaryRows, { sultan })
+    if (!filteredRows.length) return
+    const sortedRows = sortBy(filteredRows, row => {
+      return new Date(row.date)
+    })
+    return get(last(sortedRows), 'score')
+  },
+
   maxDate: (state: SummaryState, getters: any) => {
     const dates = map(getters.summaryRows, (rows: any) => {
-      return rows.date
+      return new Date(rows.date)
     })
     return max(dates)
+  },
+
+  summaryDateSuggestion: (state: SummaryState, getters: any) => {
+    const newDate = date.addToDate(getters.maxDate, { days: 7 })
+    return date.formatDate(newDate, 'MM/DD/YYYY')
   },
 
   summaryHeaders: (state: SummaryState, getters: any) => {
@@ -56,11 +71,12 @@ const actions = {
 
   NewSummaryRecords: ({ commit, getters, state }: ActionParameters) => {
     const sultans: { name: string, active: boolean }[] = getters.sultans
-    const date = prompt('Please enter the date for these records')
+    const date = prompt('Please enter the date for these records', getters.summaryDateSuggestion)
     if (!date) return
     const newValues: any = compact(map(sultans, sultan => {
-      if (!sultan.active) return
-      const score = prompt(`Please enter the score for ${sultan.name}`)
+      const active: boolean = Boolean(Number(sultan.active))
+      if (!active) return
+      const score = prompt(`Please enter the score for ${sultan.name}`, getters.latestScoreBySultan(sultan.name))
       return [sultan.name, date, score]
     }))
     if (!state.summaryData) return

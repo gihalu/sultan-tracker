@@ -36,7 +36,7 @@
             <q-icon name="home" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Home</q-item-label>
+            <q-item-label>Summary</q-item-label>
           </q-item-section>
         </q-item>
         <q-item

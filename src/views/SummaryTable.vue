@@ -4,7 +4,7 @@
       title="Summary"
       :data="rows"
       :columns="columns"
-      row-key="sultan"
+      row-key="key"
     />
   </div>
 </template>

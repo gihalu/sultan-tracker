@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { fromPairs, map, startCase } from 'lodash'
+import { assign, fromPairs, map, startCase } from 'lodash'
 
 
 export interface ValueRange {
@@ -45,10 +45,11 @@ const getters = {
   },
 
   rowsFromValues: () => (values: string[][], columns: { field: string }[]) => {
-    return map(values, row => {
-      return fromPairs(map(row, (item, index) => {
+    return map(values, (row, key) => {
+      const rowDetails = fromPairs(map(row, (item, index) => {
         return [columns[index]['field'], item]
       }))
+      return assign({ key }, rowDetails)
     })
   },
 
