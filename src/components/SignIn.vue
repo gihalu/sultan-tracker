@@ -7,6 +7,9 @@
       @click="SignIn"
     />
     <span v-else>
+      <q-avatar class="q-mr-sm">
+        <img :src="user.image">
+      </q-avatar>
       {{ name }} : <a
         href="/"
         click.prevent="SignOut"
@@ -64,6 +67,7 @@ export default Vue.extend({
     })
     vm.$gapi.currentUser().then((result: any) => {
       this.user = result
+      this.$store.commit('SetUser', result)
     })
   }
 })

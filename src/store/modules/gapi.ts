@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { assign, fromPairs, map, startCase } from 'lodash'
+import { assign, fromPairs, includes, map, startCase } from 'lodash'
 
 
 export interface ValueRange {
@@ -8,10 +8,20 @@ export interface ValueRange {
   values: string[][]
 }
 
+interface User {
+  email: string,
+  firstname: string,
+  id: string,
+  image: string,
+  lastname: string,
+  name: string
+}
 class GapiState {
+  admins: string[] = ['gihalu@gmail.com', 'revfer1@gmail.com']
   apiUrl: string = 'https://sheets.googleapis.com/v4/spreadsheets/1Y2WXJDgKVFz34fA_jlXkU_Adgxvnnpp-SAUvnwyhZ_M'
   range: string = 'records!A1:Z999'
   summaryData: ValueRange | null = null
+  user: User | null = null
 }
 
 interface ActionParameters {
@@ -44,6 +54,11 @@ const getters = {
     return `${state.apiUrl}/${path}/${encodeURI(parameters)}`
   },
 
+  isAdmin: (state: GapiState) => {
+    if (state.user === null) return
+    return includes(state.admins, state.user.email)
+  },
+
   rowsFromValues: () => (values: string[][], columns: { field: string }[]) => {
     return map(values, (row, key) => {
       const rowDetails = fromPairs(map(row, (item, index) => {
@@ -53,12 +68,17 @@ const getters = {
     })
   },
 
+  user: (state: GapiState): User | null => state.user
+
 }
 
 const actions = {
 }
 
 const mutations = {
+  SetUser: (state: GapiState, user: User) => {
+    state.user = user
+  }
 }
 
 export default {
