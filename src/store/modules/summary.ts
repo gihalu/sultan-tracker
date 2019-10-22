@@ -9,8 +9,15 @@ interface ActionParameters {
   state: SummaryState
 }
 
+export interface summary {
+  date: string
+  key: number
+  name: string
+  score: string
+}
+
 class SummaryState {
-  range: string = 'records!A1:Z999'
+  range: string = 'data!A1:Z999'
   summaryData: ValueRange | null = null
 }
 
@@ -51,6 +58,9 @@ const getters = {
     if (!state.summaryData) return
     const values = state.summaryData.values
     return getters.rowsFromValues(tail(values), getters.summaryHeaders)
+  },
+
+  totalUnionPower: (state: SummaryState, getters: any) => {
   }
 }
 

@@ -6,15 +6,30 @@
       v-if="!isSignedIn"
       @click="SignIn"
     />
-    <span v-else>
-      <q-avatar class="q-mr-sm">
-        <img :src="user.image">
-      </q-avatar>
-      {{ name }} : <a
-        href="/"
-        click.prevent="SignOut"
-      >sign out</a>
-    </span>
+    <q-btn-dropdown
+      flat
+      v-else
+    >
+      <template v-slot:label>
+        <q-avatar class="q-mr-sm">
+          <img :src="user.image">
+        </q-avatar>
+        {{ name }}
+      </template>
+
+      <q-list>
+        <q-item
+          clickable
+          v-close-popup
+          @click="SignOut"
+        >
+          <q-item-section>
+            <q-item-label>Sign Out</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+
+    </q-btn-dropdown>
   </div>
 </template>
 

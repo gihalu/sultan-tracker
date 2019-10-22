@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { filter, map, set } from 'lodash'
+import { filter, get, map, set } from 'lodash'
 import SignIn from '../components/SignIn.vue'
 
 export default Vue.extend({
@@ -97,7 +97,10 @@ export default Vue.extend({
   },
   computed: {
     activeSultanNames () {
-      return map(filter(this.sultans, sultan => Number(sultan.active)), 'name')
+      return map(
+        filter(get(this, 'sultans'), sultan => Number(sultan.active)),
+        'name'
+      )
     },
 
     isAdmin () {
