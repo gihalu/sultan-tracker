@@ -75,11 +75,12 @@ export default Vue.extend({
     },
 
     sultans () {
-      return this.$store.getters.sultans
+      return get(this.$store, 'getters.sultans')
     }
   },
   created () {
-    this.$store.dispatch('GetSultans')
+    const actions: any = get(this, '$store.dispatch')
+    actions('GetSultans')
   }
 })
 </script>
