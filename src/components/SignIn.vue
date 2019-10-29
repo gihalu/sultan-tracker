@@ -58,6 +58,7 @@ export default Vue.extend({
         .signIn()
         .then((response: any) => {
           console.log({ response })
+          location.reload()
         })
         .catch((error: any) => {
           console.error({ error })
@@ -69,6 +70,7 @@ export default Vue.extend({
         .signOut()
         .then((response: any) => {
           console.log({ response })
+          location.reload()
         })
         .catch((error: any) => {
           console.error({ error })

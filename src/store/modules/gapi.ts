@@ -55,8 +55,12 @@ const getters = {
   },
 
   isAdmin: (state: GapiState) => {
-    if (state.user === null) return
+    if (state.user === null) return false
     return includes(state.admins, state.user.email)
+  },
+
+  isLoggedIn: (state: GapiState) => {
+    return Boolean(state.user)
   },
 
   rowsFromValues: () => (values: string[][], columns: { field: string }[]) => {

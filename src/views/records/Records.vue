@@ -3,6 +3,7 @@
     <records-table
       :columns="columns"
       :rows="rows"
+      v-if="isAdmin"
     />
   </q-page>
 </template>
@@ -18,19 +19,14 @@ export default Vue.extend({
     columns (): any {
       return this.$store.getters.summaryHeaders
     },
+    isAdmin (): boolean {
+      return this.$store.getters.isAdmin
+    },
     rows (): any {
       return this.$store.getters.summaryRows
     }
   },
-  methods: {
-    SignIn () {
-      const gapi = get(this, '$gapi')
-      gapi
-        .signIn()
-        .then((response: any) => console.log({ response }))
-        .catch((error: any) => console.error({ error }))
-    }
-  },
+  methods: {},
   components: {
     RecordsTable
   },
