@@ -10,6 +10,8 @@ class ConfigState {
 
 const configState = new ConfigState()
 
+console.log(`https://developers.google.com/identity/protocols/OAuth2ServiceAccount for using a service account to log in instead of passing in user OAuth`)
+
 export const DecodedCookies = () => {
   const cookies: string[] = split(document.cookie, ';');
   const decodedCookies: {} = fromPairs(

@@ -1,15 +1,17 @@
-import { concat, cloneDeep, findIndex, head, tail } from 'lodash'
-import { ValueRange } from './gapi'
+import { assign, concat, cloneDeep, findIndex, head, map, tail } from "lodash"
+import { ValueRange } from "./gapi"
+import Axios from "axios"
 
 class SultanState {
-  range: string = 'sultans!A1:Z999'
+  range: string = "sultans!A1:Z999"
   sultanData: ValueRange | null = null
 }
 
 interface ActionParameters {
-  commit?: any,
-  dispatch?: any,
-  getters?: any,
+  commit?: any
+  dispatch?: any
+  getters?: any
+  rootGetters?: any
   state: SultanState
 }
 
@@ -18,6 +20,12 @@ const state = new SultanState()
 
 // getters
 const getters = {
+  sultanDetails: (state: SultanState, getters: any, rootState: any, rootGetters: any) => (sultan: { name: string }) => {
+    const currentScore = getters.currentScoreBySultan(sultan.name)
+    const tier = getters.tier(currentScore)
+    return assign({}, sultan, { currentScore, tier })
+  },
+
   sultanHeaders: (state: SultanState, getters: any) => {
     if (!state.sultanData) return
     const values = state.sultanData.values
@@ -28,62 +36,63 @@ const getters = {
     if (!state.sultanData) return
     const values = state.sultanData.values
     return getters.rowsFromValues(tail(values), getters.sultanHeaders)
+  },
+
+  sultanDetailGrid: (state: SultanState, getters: any) => {
+    if (!getters.sultans) return
+    return map(getters.sultans, sultan => {
+      return getters.sultanDetails(sultan)
+    })
   }
-}
+};
 
 // actions
 const actions = {
   AddSultan: ({ commit, dispatch, state }: ActionParameters) => {
-    const name = prompt('Please enter the name of the new Sultan')
+    const name = prompt("Please enter the name of the new Sultan")
     if (!name) return
-    const newSultan = [name, '1']
+    const newSultan = [name, "1"]
     if (!state.sultanData) return
     const sultanValues: string[][] = state.sultanData.values
     const newSultanValues: string[][] = concat(sultanValues, [newSultan])
-    commit('SetSultans', newSultanValues)
-    dispatch('UpdateSultans')
+    commit("SetSultans", newSultanValues)
+    dispatch("UpdateSultans")
   },
 
-  GetSultans: ({ commit, getters, state }: ActionParameters) => {
-    return getters.gapi.request({
-      path: getters.gapiUrl({ parameters: state.range }),
-      method: 'GET'
-    })
-      .then((response: { result: any }) => {
-        const data = response.result
-        commit('SetSultanData', data)
+  GetSultans: ({ commit, rootGetters }: ActionParameters) => {
+    const authorization = rootGetters["serviceAccount/authorization"]
+    const url = rootGetters.sheetsUrl(state.range)
+    return Axios.get(url, { headers: { authorization } })
+      .then(response => {
+        const data = response.data
+        commit("SetSultanData", data)
       })
       .catch((error: any) => console.error({ error }))
   },
 
-  ToggleSultan ({ commit, dispatch, state }: ActionParameters, sultan: { name: string, active: string }) {
-    console.log('called', { sultan })
-    if (!state.sultanData) return
+  ToggleSultan (
+    { commit, dispatch, state }: ActionParameters,
+    sultan: { name: string; active: string }
+  ) {
+    if (!state.sultanData) return;
     const sultanValues: string[][] = cloneDeep(state.sultanData.values)
     const sultanIndex = findIndex(sultanValues, (sultanArray: string[]) => {
       return sultanArray[0] == sultan.name
-    })
-    const newValue = sultan.active == '1' ? '0' : '1'
+    });
+    const newValue = sultan.active == "1" ? "0" : "1"
     const newSultan = [sultan.name, newValue]
     sultanValues.splice(sultanIndex, 1, newSultan)
-    console.log({ newSultan, sultanValues, state })
-    commit('SetSultans', sultanValues)
-    dispatch('UpdateSultans')
+    commit("SetSultans", sultanValues)
+    dispatch("UpdateSultans")
   },
 
-  UpdateSultans: ({ state, getters }: ActionParameters) => {
-    return getters.gapi.request({
-      path: getters.gapiUrl({ parameters: state.range }),
-      method: 'PUT',
-      params: {
-        valueInputOption: 'RAW',
-      },
-      body: state.sultanData
-    })
-      .then((response: any) => console.log({ response }))
+  UpdateSultans: ({ state, rootGetters }: ActionParameters) => {
+    const authorization = rootGetters["serviceAccount/authorization"]
+    const url = `${rootGetters.sheetsUrl(state.range)}?valueInputOption=RAW`
+    return Axios.put(url, state.sultanData, { headers: { authorization } })
       .catch((error: any) => console.error({ error }))
   }
-}
+};
 
 // mutations
 const mutations = {
@@ -94,11 +103,11 @@ const mutations = {
     if (!state.sultanData || !newSultanValues) return
     state.sultanData.values = newSultanValues
   }
-}
+};
 
 export default {
   state,
   getters,
   actions,
   mutations
-}
+};

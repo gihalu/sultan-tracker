@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store'
+import { IsAdmin } from './services/routeGuards'
 import DefaultLayout from './layouts/Default.vue'
 import Records from './views/records/Records.vue'
-import About from './views/About.vue'
 import Sultans from './views/sultans/Sultans.vue'
 import Report from './views/report/Report.vue'
+import Home from './views/Home.vue'
 
 Vue.use(Router)
+
+const AdminGuard: any = IsAdmin(store)
 
 export default new Router({
   routes: [
@@ -15,18 +19,17 @@ export default new Router({
       component: DefaultLayout,
       children: [
         {
-          path: '',
+          path: '/',
+          name: 'home',
+          component: Home
+        },
+        {
+          path: '/records',
           name: 'records',
           component: Records
         },
         {
-          path: '/about',
-          name: 'about',
-          component: About
-        },
-        {
           path: '/report',
-          name: 'report',
           component: Report
         },
         {
@@ -37,7 +40,8 @@ export default new Router({
         {
           path: '/sultans',
           name: 'sultans',
-          component: Sultans
+          component: Sultans,
+          beforeEnter: AdminGuard
         }
       ]
     }

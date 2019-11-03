@@ -1,5 +1,6 @@
-import { compact, concat, cloneDeep, findIndex, head, inRange, map, tail } from 'lodash'
+import { compact, head, inRange, map, tail } from 'lodash'
 import { ValueRange } from './gapi'
+import Axios from 'axios'
 
 class TierState {
   range: string = 'tiers!A1:Z999'
@@ -16,6 +17,7 @@ interface ActionParameters {
   commit?: any,
   dispatch?: any,
   getters?: any,
+  rootGetters?: any,
   state: TierState
 }
 
@@ -38,7 +40,8 @@ const getters = {
 
   tier: (state: TierState, getters: any) => (score: string) => {
     return head(compact(map(getters.tiers, (tier: Tier) => {
-      return inRange(Number(score), Number(tier.min), Number(tier.max)) ? tier.tier : null
+      const tierName = inRange(Number(score), Number(tier.min), Number(tier.max)) ? tier.tier : null
+      return tierName
     })))
   }
 }
@@ -46,16 +49,15 @@ const getters = {
 // actions
 const actions = {
 
-  GetTiers: ({ commit, getters, state }: ActionParameters) => {
-    return getters.gapi.request({
-      path: getters.gapiUrl({ parameters: state.range }),
-      method: 'GET'
-    })
-      .then((response: { result: any }) => {
-        const data = response.result
-        commit('SetTierData', data)
+  GetTiers: ({ commit, getters, rootGetters, state }: ActionParameters) => {
+    const authorization = rootGetters['serviceAccount/authorization'];
+    const url = rootGetters.sheetsUrl(state.range);
+    return Axios.get(url, { headers: { authorization } })
+      .then(response => {
+        const data = response.data;
+        commit('SetTierData', data);
       })
-      .catch((error: any) => console.error({ error }))
+      .catch((error: any) => console.error({ error }));
   }
 }
 

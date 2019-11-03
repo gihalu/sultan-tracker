@@ -10,7 +10,6 @@
           tag="label"
           v-ripple
           v-for="(sultan, key) in sultans"
-          @click="ToggleSultan(sultan)"
         >
           <q-item-section>
             <q-item-label>{{sultan.name}}</q-item-label>
@@ -19,6 +18,7 @@
             <q-toggle
               color="blue"
               :value="Boolean(Number(sultan.active))"
+              @input="ToggleSultan(sultan)"
             />
           </q-item-section>
         </q-item>
@@ -43,19 +43,24 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapGetters } from 'vuex'
 import { findIndex, isMatch } from 'lodash'
+import Component from 'vue-class-component'
+import { Getter, Action } from 'vuex-class'
 
-export default Vue.extend({
-  name: 'PageHome',
-  computed: {
-    ...mapGetters(['sultans'])
-  },
-  methods: {
-    ...mapActions(['AddSultan', 'ToggleSultan'])
-  },
-  created () {
-    this.$store.dispatch('GetSultans')
+@Component
+export default class Sultans extends Vue {
+  @Getter sultans!: [];
+
+  @Action AddSultan!: Function;
+  @Action GetSultans!: Function;
+  @Action ToggleSultan!: Function;
+
+  Test (sultan: any) {
+    console.log({ sultan })
   }
-})
+
+  created () {
+    this.GetSultans()
+  }
+}
 </script>

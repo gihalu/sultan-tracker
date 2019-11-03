@@ -25,9 +25,11 @@ import {
   QPage,
   QPageContainer,
   QSelect,
+  QSeparator,
   QSpace,
   QSpinnerGears,
   QSpinnerGrid,
+  QSpinnerPuff,
   QTable,
   QTd,
   QTh,
@@ -60,9 +62,11 @@ Vue.use(Quasar, {
     QPage,
     QPageContainer,
     QSelect,
+    QSeparator,
     QSpace,
     QSpinnerGears,
     QSpinnerGrid,
+    QSpinnerPuff,
     QTable,
     QTd,
     QTh,
@@ -74,6 +78,5 @@ Vue.use(Quasar, {
   directives: {
     Ripple
   },
-  plugins: {
-  }
+  plugins: {}
 })

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-lg">
-    <q-card>
+    <q-card v-if="filteredRows.length">
       <q-card-section class="bg-secondary text-accent">
         <div class="text-h6 row justify-between">
           {{ sultan }} Trending Report
@@ -28,6 +28,15 @@
         </q-inner-loading>
       </q-card-section>
     </q-card>
+    <div
+      class="fixed-center"
+      v-else
+    >
+      <h6>
+        <span v-if="loadingData">Loading data</span>
+        <span>Unfortunately, we could not find any recods for {{ sultan }}</span>
+      </h6>
+    </div>
   </q-page>
 </template>
 
@@ -35,72 +44,77 @@
 import Vue from 'vue'
 import Chart from './components/Chart.vue'
 import { filter, get, last, map } from 'lodash'
+import Component from 'vue-class-component'
+import { Getter } from 'vuex-class'
 
-export default Vue.extend({
-  name: 'report',
-  data () {
+@Component({
+  components: { Chart }
+})
+export default class report extends Vue {
+  private update = { status: false };
+
+  get chartData () {
+    const rows = this.filteredRows
     return {
-      update: { status: false }
+      labels: map(rows, 'date'),
+      datasets: [
+        {
+          label: 'Strength',
+          data: map(rows, 'score'),
+          borderWidth: 1
+        }
+      ]
     }
-  },
-  computed: {
-    chartData () {
-      const rows = get(this, 'filteredRows')
-      return {
-        labels: map(rows, 'date'),
-        datasets: [
+  }
+
+  get filteredRows () {
+    const sultan = this.sultan
+    return filter(this.rows, { name: sultan })
+  }
+
+  get lastRow () {
+    return last(this.filteredRows)
+  }
+
+  get loadingData () {
+    return !get(this.sultans, 'length') || !get(this.rows, 'length')
+  }
+
+  get options () {
+    return {
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [
           {
-            label: 'Strength',
-            data: map(rows, 'score'),
-            borderWidth: 1
+            ticks: {
+              beginAtZero: true
+            }
           }
         ]
       }
-    },
-    filteredRows () {
-      const sultan = get(this, 'sultan')
-      return filter(get(this, 'rows'), { name: sultan })
-    },
-    lastRow () {
-      return last(get(this, 'filteredRows'))
-    },
-    options () {
-      return {
-        legend: {
-          display: false
-        },
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
-      }
-    },
-    rows (): any {
-      return this.$store.getters.summaryRows
-    },
-    sultan () {
-      return this.$route.params.sultan
-    },
-    tier () {
-      return this.$store.getters.tier(get(this, 'lastRow.score'))
     }
-  },
-  methods: {
-    UpdateSelectedSultan (sultan: string) {
-      this.$router.push(`/report/${sultan}`)
-    }
-  },
-  components: {
-    Chart
-  },
+  }
+  get rows (): any {
+    return this.$store.getters.summaryRows
+  }
+  get sultan () {
+    return this.$route.params.sultan
+  }
+  get tier () {
+    return this.$store.getters.tier(get(this, 'lastRow.score'))
+  }
+
+  @Getter sultans!: []
+
+  UpdateSelectedSultan (sultan: string) {
+    this.$router.push(`/report/${sultan}`)
+  }
+
   created () {
     this.$store.dispatch('GetSummary')
     this.$store.dispatch('GetTiers')
   }
-})
+}
 </script>

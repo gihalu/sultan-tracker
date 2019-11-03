@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lFf">
+  <q-layout view="hLf Lpr lff">
     <q-header
       elevated
       class="text-accent"
@@ -14,14 +14,30 @@
           icon="menu"
         />
 
-        <q-toolbar-title>
-          Drunken Sultan Tracker
-        </q-toolbar-title>
+        <q-btn
+          class="text-warn"
+          stretch
+          flat
+          to="/"
+        >
+
+          <q-toolbar-title>
+            Gotham Elite Sultan Tracker
+          </q-toolbar-title>
+
+        </q-btn>
+
+        <q-space />
+
         <sign-in />
       </q-toolbar>
     </q-header>
 
-    <app-drawer :isAdmin="isAdmin" :drawer="{leftDrawerOpen}" v-if="isLoggedIn" />
+    <app-drawer
+      :isAdmin="isAdmin"
+      :leftDrawerOpen="leftDrawerOpen"
+      @close="leftDrawerOpen = false"
+    />
 
     <q-page-container>
       <router-view />
@@ -34,27 +50,19 @@ import Vue from 'vue'
 import { set } from 'lodash'
 import SignIn from '../components/SignIn.vue'
 import AppDrawer from './Drawer.vue'
+import Component from 'vue-class-component'
 
-export default Vue.extend({
-  name: 'LayoutDefault',
-  data () {
-    return {
-      leftDrawerOpen: this.$q.platform.is.desktop
-    }
-  },
-  computed: {
-
-    isAdmin () {
-      return this.$store.getters.isAdmin
-    },
-
-    isLoggedIn () {
-      return this.$store.getters.isLoggedIn
-    }
-  },
+@Component({
   components: {
     AppDrawer,
     SignIn
   }
 })
+export default class Layout extends Vue {
+  private leftDrawerOpen: boolean = Boolean(this.$q.platform.is.desktop);
+
+  get isAdmin () {
+    return this.$store.getters.isAdmin
+  }
+}
 </script>

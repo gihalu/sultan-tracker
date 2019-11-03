@@ -46,7 +46,6 @@ export default Vue.extend({
   mounted () {
     const chart = this.CreateChart()
     this.chart = chart
-    console.log({ vm: this })
   },
   watch: {
     chartData: {
