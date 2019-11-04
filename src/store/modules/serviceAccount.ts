@@ -1,7 +1,10 @@
 import { get } from "lodash";
-import {} from "quasar";
+import { } from "quasar";
 import Axios from "axios";
 const jwt = require("jsonwebtoken");
+
+const epk: string = process.env.PRIVATE_KEY
+console.log({ epk })
 
 export class AccountState {
   accessToken: string | null = null;
