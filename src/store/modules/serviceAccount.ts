@@ -3,8 +3,9 @@ import { } from "quasar";
 import Axios from "axios";
 const jwt = require("jsonwebtoken");
 
-const epk: string = process.env.PRIVATE_KEY
-console.log({ epk })
+const env: string = process.env.VUE_APP_ENV
+const epk: string = process.env.VUE_APP_PRIVATE_KEY
+console.log({ epk, env })
 
 export class AccountState {
   accessToken: string | null = null;
