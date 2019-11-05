@@ -2,8 +2,8 @@ import { fromPairs, get, map, split, trim } from 'lodash'
 const CryptoJs = require('crypto-js')
 
 class ConfigState {
-  public apiKey: string | null = null
-  public clientId: string = '528211752834-cmtsp33ed07uc1lfhq92f4q7p11e2vl1.apps.googleusercontent.com'
+  public apiKey: string = process.env.VUE_APP_API_KEY
+  public clientId: string = process.env.VUE_APP_CLIENT_ID
   public encryptedApiKey: string = 'U2FsdGVkX1+uPVoMzUqXcXw8JEgQKHLDNgKNFEDtcQNrNrilodrNqWckUXLSi3Ghs/JcR/ferPyCpNsxsPLZWg=='
   public scope: string = 'email profile openid'
 }
