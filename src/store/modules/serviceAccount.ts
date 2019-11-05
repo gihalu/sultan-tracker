@@ -17,9 +17,16 @@ export class AccountState {
     expiresIn: "1h",
     header: { alg: "RS256", typ: "JWT" }
   };
-  key: string = process.env.VUE_APP_SA_KEY;
+  private key: string = process.env.VUE_APP_SA_KEY;
   tokenExpiration: number | null = null;
   tokenStatus: 'none' | 'pending' | 'success' | 'failure' = 'none'
+
+  get keyCertificate () {
+    // const keyArray = this.key.match(/.{1,64}/g) || []
+    // const keyString = keyArray.join('\n');
+    // return `-----BEGIN PRIVATE KEY-----\n${keyString}\n-----END PRIVATE KEY-----\n`;
+    return decodeURI(this.key)
+  }
 }
 
 interface ActionParameters {
@@ -54,7 +61,7 @@ const actions = {
 
     if (state.tokenStatus == 'pending') return
 
-    const encodedJwt = jwt.sign(state.jwtClaims, state.key, state.jwtOptions);
+    const encodedJwt = jwt.sign(state.jwtClaims, state.keyCertificate, state.jwtOptions);
     const parameters = `grant_type=${state.grantType}&assertion=${encodedJwt}`;
 
     return Axios.post("https://oauth2.googleapis.com/token", parameters)
