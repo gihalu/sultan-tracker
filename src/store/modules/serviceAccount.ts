@@ -3,10 +3,6 @@ import { } from "quasar";
 import Axios from "axios";
 const jwt = require("jsonwebtoken");
 
-const env: string = process.env.VUE_APP_ENV
-const epk: string = process.env.VUE_APP_PRIVATE_KEY
-console.log({ epk, env })
-
 export class AccountState {
   accessToken: string | null = null;
   expirationBuffer: number = 120;
@@ -21,8 +17,9 @@ export class AccountState {
     expiresIn: "1h",
     header: { alg: "RS256", typ: "JWT" }
   };
-  key = epk;
+  key: string = process.env.VUE_APP_SA_KEY;
   tokenExpiration: number | null = null;
+  tokenStatus: 'none' | 'pending' | 'success' | 'failure' = 'none'
 }
 
 interface ActionParameters {
@@ -54,6 +51,9 @@ const getters = {
 // actions
 const actions = {
   GetAccessToken: ({ commit, state }: ActionParameters) => {
+
+    if (state.tokenStatus == 'pending') return
+
     const encodedJwt = jwt.sign(state.jwtClaims, state.key, state.jwtOptions);
     const parameters = `grant_type=${state.grantType}&assertion=${encodedJwt}`;
 
@@ -65,9 +65,12 @@ const actions = {
         const expiration =
           Number(new Date()) + (get(response.data, "expires_in") - 120) * 1000;
         commit("SetTokenExpiration", expiration);
+
+        commit('SetTokenStatus', 'success')
       })
       .catch(error => {
         console.error("GetAccessToken failed with", { error });
+        commit('SetTokenStatus', 'failure')
       });
   }
 };
@@ -80,6 +83,10 @@ const mutations = {
 
   SetTokenExpiration: (state: AccountState, exiration: number) => {
     state.tokenExpiration = exiration;
+  },
+
+  SetTokenStatus: (state: AccountState, status: 'success' | 'failure') => {
+    state.tokenStatus = status
   }
 };
 
