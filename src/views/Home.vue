@@ -1,9 +1,17 @@
 <template>
-  <q-page padding>
-    <!-- <overview v-if="summaryRows && summaryRows.length" /> -->
-    <h5 class="fixed-center">{{ welcomeMessage }}</h5>
+  <q-page class="flex flex-center custom-background">
+    <h4 class="fixed-center text-accent text-weight-bold">{{ welcomeMessage }}</h4>
   </q-page>
 </template>
+
+<style lang="stylus" scoped>
+.custom-background {
+  background-image: url('../assets/background.jpg');
+  background-color: black;
+  background-size: cover;
+  background-position: center;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
