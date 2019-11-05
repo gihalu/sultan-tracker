@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center custom-background">
-    <h4 class="fixed-center text-primary text-weight-bold">{{ welcomeMessage }}</h4>
+    <h4 class="fixed-center text-accent text-weight-bold">{{ welcomeMessage }}</h4>
   </q-page>
 </template>
 
