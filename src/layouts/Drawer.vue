@@ -5,7 +5,13 @@
   >
     <q-list dense>
 
-      <q-item
+      <q-item class="q-mt-sm q-mb-sm">
+        <q-item-section>
+          <sign-in />
+        </q-item-section>
+      </q-item>
+
+      <!-- <q-item
         to="/"
         exact
         @click="CloseDrawer"
@@ -16,7 +22,7 @@
         <q-item-section>
           <q-item-label>Home</q-item-label>
         </q-item-section>
-      </q-item>
+      </q-item> -->
 
       <q-item
         to="/records"
@@ -69,36 +75,41 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { filter, get, map } from 'lodash';
-import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import Vue from 'vue'
+import { filter, get, map } from 'lodash'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import SignIn from '../components/SignIn.vue'
 
-@Component
+@Component({
+  components: {
+    SignIn
+  }
+})
 export default class AppDrawer extends Vue {
   @Prop(Boolean) readonly leftDrawerOpen: boolean | undefined;
   @Prop(Boolean) readonly isAdmin: boolean | undefined;
 
-  get activeSultanNames() {
+  get activeSultanNames () {
     return map(
       filter(this.sultans, (sultan: { active: string }) => {
-        return Number(sultan.active);
+        return Number(sultan.active)
       }),
       'name'
-    );
+    )
   }
 
-  get sultans() {
-    return get(this.$store, 'getters.sultans');
+  get sultans () {
+    return get(this.$store, 'getters.sultans')
   }
 
-  CloseDrawer() {
-    this.$emit('close');
+  CloseDrawer () {
+    this.$emit('close')
   }
 
-  created() {
-    const actions: any = get(this, '$store.dispatch');
-    actions('GetSultans');
+  created () {
+    const actions: any = get(this, '$store.dispatch')
+    actions('GetSultans')
   }
 }
 </script>

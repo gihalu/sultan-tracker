@@ -2,6 +2,7 @@
 <template>
   <div>
     <google-signin-btn
+      class="full-width"
       label="Sign In"
       v-if="!isSignedIn"
       @click="SignIn"

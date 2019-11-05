@@ -29,7 +29,7 @@
 
         <q-space />
 
-        <sign-in />
+        <!-- <sign-in /> -->
       </q-toolbar>
     </q-header>
 
