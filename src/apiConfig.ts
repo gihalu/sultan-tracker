@@ -5,12 +5,10 @@ class ConfigState {
   public apiKey: string | null = null
   public clientId: string = '528211752834-cmtsp33ed07uc1lfhq92f4q7p11e2vl1.apps.googleusercontent.com'
   public encryptedApiKey: string = 'U2FsdGVkX1+uPVoMzUqXcXw8JEgQKHLDNgKNFEDtcQNrNrilodrNqWckUXLSi3Ghs/JcR/ferPyCpNsxsPLZWg=='
-  public scope: string = 'email profile openid https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/spreadsheets'
+  public scope: string = 'email profile openid'
 }
 
 const configState = new ConfigState()
-
-console.log(`https://developers.google.com/identity/protocols/OAuth2ServiceAccount for using a service account to log in instead of passing in user OAuth`)
 
 export const DecodedCookies = () => {
   const cookies: string[] = split(document.cookie, ';');

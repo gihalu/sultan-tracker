@@ -22,9 +22,6 @@ export class AccountState {
   tokenStatus: 'none' | 'pending' | 'success' | 'failure' = 'none'
 
   get keyCertificate () {
-    // const keyArray = this.key.match(/.{1,64}/g) || []
-    // const keyString = keyArray.join('\n');
-    // return `-----BEGIN PRIVATE KEY-----\n${keyString}\n-----END PRIVATE KEY-----\n`;
     return decodeURI(this.key)
   }
 }
