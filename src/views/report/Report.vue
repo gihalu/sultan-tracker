@@ -43,7 +43,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Chart from './components/Chart.vue'
-import { filter, get, last, map } from 'lodash'
+import { filter, get, last, map, toNumber } from 'lodash'
 import Component from 'vue-class-component'
 import { Getter } from 'vuex-class'
 
@@ -60,7 +60,9 @@ export default class report extends Vue {
       datasets: [
         {
           label: 'Strength',
-          data: map(rows, 'score'),
+          data: map(rows, row => {
+            return toNumber(row.score.replace(/,/g, ''))
+          }),
           borderWidth: 1
         }
       ]
@@ -106,7 +108,7 @@ export default class report extends Vue {
     return this.$store.getters.tier(get(this, 'lastRow.score'))
   }
 
-  @Getter sultans!: []
+  @Getter sultans!: [];
 
   UpdateSelectedSultan (sultan: string) {
     this.$router.push(`/report/${sultan}`)
