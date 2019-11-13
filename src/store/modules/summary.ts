@@ -46,7 +46,7 @@ const getters = {
     if (!getters.maxDate) return null
     const date = (getters.maxDate as Date).toLocaleDateString()
     const currentSultanRow = find(getters.summaryRows, { date, name: sultan })
-    return Number(currentSultanRow.score)
+    return Number(get(currentSultanRow, 'score', '').replace(/,/g, ''))
   },
 
   latestScoreBySultan: (state: SummaryState, getters: any) => (

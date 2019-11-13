@@ -1,4 +1,4 @@
-import { assign, concat, cloneDeep, findIndex, head, map, tail } from "lodash"
+import { assign, compact, concat, cloneDeep, findIndex, head, map, tail } from "lodash"
 import { ValueRange } from "./gapi"
 import Axios from "axios"
 
@@ -40,9 +40,10 @@ const getters = {
 
   sultanDetailGrid: (state: SultanState, getters: any) => {
     if (!getters.sultans) return
-    return map(getters.sultans, sultan => {
+    return compact(map(getters.sultans, sultan => {
+      if (!Number(sultan.active)) return
       return getters.sultanDetails(sultan)
-    })
+    }))
   }
 };
 

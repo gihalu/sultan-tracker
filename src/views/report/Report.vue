@@ -105,7 +105,8 @@ export default class report extends Vue {
     return this.$route.params.sultan
   }
   get tier () {
-    return this.$store.getters.tier(get(this, 'lastRow.score'))
+    const score = Number(get(this, 'lastRow.score', '').replace(/,/g, ''))
+    return this.$store.getters.tier(score)
   }
 
   @Getter sultans!: [];
@@ -117,6 +118,7 @@ export default class report extends Vue {
   created () {
     this.$store.dispatch('GetSummary')
     this.$store.dispatch('GetTiers')
+    window.app = this.$root
   }
 }
 </script>

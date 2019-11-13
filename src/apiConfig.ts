@@ -34,8 +34,7 @@ export const GetApiKey = () => {
     configState.apiKey = cookieKey
     return
   }
-  const secret = 'DrunkenSultans' //prompt('Please enter the validation code (case sensitive) to proceed with this app')
-  if (!secret) return
+  const secret = 'DrunkenSultans'
   const bytes = CryptoJs.AES.decrypt(configState.encryptedApiKey, secret)
   const decryptedKey = bytes.toString(CryptoJs.enc.Utf8)
   if (!decryptedKey) {

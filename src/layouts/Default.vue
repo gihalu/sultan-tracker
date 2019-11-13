@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hLf Lpr lff">
+  <q-layout view="hHh Lpr fff">
     <q-header
       elevated
       class="text-accent"
