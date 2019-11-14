@@ -118,7 +118,6 @@ export default class report extends Vue {
   created () {
     this.$store.dispatch('GetSummary')
     this.$store.dispatch('GetTiers')
-    window.app = this.$root
   }
 }
 </script>

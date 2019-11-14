@@ -52,6 +52,19 @@
         </q-item-section>
       </q-item>
 
+      <q-item
+        to="/details"
+        exact
+        @click="CloseDrawer"
+      >
+        <q-item-section avatar>
+          <q-icon name="list" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Details</q-item-label>
+        </q-item-section>
+      </q-item>
+
       <q-separator spaced />
 
       <q-item-label header>Reports</q-item-label>

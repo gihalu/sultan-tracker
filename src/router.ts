@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from './store'
 import { IsAdmin } from './services/routeGuards'
 import DefaultLayout from './layouts/Default.vue'
+import Details from './views/details/Details.vue'
 import Records from './views/records/Records.vue'
 import Sultans from './views/sultans/Sultans.vue'
 import Report from './views/report/Report.vue'
@@ -22,6 +23,11 @@ export default new Router({
           path: '/',
           name: 'home',
           component: Home
+        },
+        {
+          path: '/details',
+          name: 'details',
+          component: Details
         },
         {
           path: '/records',

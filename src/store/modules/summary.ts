@@ -1,4 +1,5 @@
 import {
+  assign,
   compact,
   concat,
   filter,
@@ -9,6 +10,8 @@ import {
   last,
   map,
   max,
+  pick,
+  reverse,
   sortBy,
   startCase,
   tail
@@ -32,6 +35,12 @@ export interface summary {
   score: string;
 }
 
+export interface SummaryRow {
+  date: string;
+  name: string;
+  score: string;
+}
+
 class SummaryState {
   range: string = "data!A1:Z999";
   summaryData: ValueRange | null = null;
@@ -47,6 +56,40 @@ const getters = {
     const date = (getters.maxDate as Date).toLocaleDateString()
     const currentSultanRow = find(getters.summaryRows, { date, name: sultan })
     return Number(get(currentSultanRow, 'score', '').replace(/,/g, ''))
+  },
+
+  detailRowFromSummaryRow: (state: SummaryState, getters: any) => (summaryRow: SummaryRow) => {
+    const baseRow = pick(summaryRow, ['date', 'name'])
+    const score = Number(get(summaryRow, 'score', '').replace(/,/g, ''))
+    const tier = getters.tier(score)
+    const current = summaryRow.date === (getters.maxDate as Date).toLocaleDateString();
+    return assign(baseRow, { current, score, tier })
+  },
+
+  detailRowsBySultan: (state: SummaryState, getters: any) => (sultanName: string) => {
+    const summaryRows = getters.summaryRowsBySultan(sultanName)
+
+    const baseDetails = map(summaryRows, row => {
+      return getters.detailRowFromSummaryRow(row)
+    })
+
+    const ascendingRows = sortBy(baseDetails, row => {
+      return (new Date(row.date)).valueOf()
+    })
+
+    const comparison = {
+      score: 0,
+      tier: '',
+    }
+    const detailedRows = map(ascendingRows, (row, index) => {
+      const growth = !index ? null : row.score - comparison.score
+      comparison.score = row.score
+      const promoted = !index ? false : row.tier != comparison.tier
+      comparison.tier = row.tier
+      return assign({ growth, promoted }, row)
+    })
+
+    return detailedRows
   },
 
   latestScoreBySultan: (state: SummaryState, getters: any) => (
@@ -82,6 +125,11 @@ const getters = {
     if (!state.summaryData) return;
     const values = state.summaryData.values;
     return getters.rowsFromValues(tail(values), getters.summaryHeaders);
+  },
+
+  summaryRowsBySultan: (state: SummaryState, getters: any) => (sultanName: string) => {
+    if (!getters.summaryRows) return;
+    return filter(getters.summaryRows, { name: sultanName })
   },
 
   totalUnionPower: (state: SummaryState, getters: any) => { }

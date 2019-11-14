@@ -15,15 +15,32 @@ interface ActionParameters {
   state: SultanState
 }
 
+interface DetailRow {
+  current: boolean;
+  date: string;
+  growth: number | null;
+  name: string;
+  promoted: false;
+  score: number;
+  tier: string;
+}
+
+export interface SultanDetailRow {
+  sultan: string;
+  detailRows: DetailRow[]
+}
+
 // initial state
 const state = new SultanState()
 
 // getters
 const getters = {
+
   sultanDetails: (state: SultanState, getters: any, rootState: any, rootGetters: any) => (sultan: { name: string }) => {
+    const detailRows = getters.detailRowsBySultan(sultan.name)
     const currentScore = getters.currentScoreBySultan(sultan.name)
     const tier = getters.tier(currentScore)
-    return assign({}, sultan, { currentScore, tier })
+    return assign({}, sultan, { currentScore, tier, detailRows })
   },
 
   sultanHeaders: (state: SultanState, getters: any) => {
