@@ -8,7 +8,7 @@
       class="bg-tinted text-white q-mt-md"
     >
       <q-card-section>
-        <div class="text-h6">Weekly Growth</div>
+        <div class="text-h6">Top growth this week</div>
       </q-card-section>
 
       <q-separator
@@ -16,14 +16,25 @@
         inset
       />
 
-      <q-card-section class="bg-tinted">
+      <q-card-section
+        class="bg-tinted"
+        v-if="(currentDetails || []).length"
+      >
         <div
           :key="index"
           v-for="(details, index) in topGrowth"
         >
           - {{ details.name }} grew by {{ details.growth }}
         </div>
+
       </q-card-section>
+
+      <q-inner-loading :showing="!(currentDetails || []).length">
+        <q-spinner-gears
+          size="50px"
+          color="primary"
+        />
+      </q-inner-loading>
     </q-card>
 
     <q-card
@@ -32,7 +43,7 @@
       class="bg-tinted text-white q-mt-md"
     >
       <q-card-section>
-        <div class="text-h6">Promotions</div>
+        <div class="text-h6">Promotions this week</div>
       </q-card-section>
 
       <q-separator
@@ -40,7 +51,10 @@
         inset
       />
 
-      <q-card-section class="bg-tinted">
+      <q-card-section
+        class="bg-tinted"
+        v-if="(currentDetails || []).length"
+      >
         <div
           :key="index"
           v-for="(details, index) in currentPromotions"
@@ -48,7 +62,15 @@
           - {{ details.name }} was promoted to {{ details.tier }}
         </div>
       </q-card-section>
+
+      <q-inner-loading :showing="!(currentDetails || []).length">
+        <q-spinner-gears
+          size="50px"
+          color="primary"
+        />
+      </q-inner-loading>
     </q-card>
+
   </q-page>
 </template>
 
