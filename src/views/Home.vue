@@ -1,5 +1,7 @@
 <template>
-  <q-page class="q-pa-lg custom-background">
+  <q-page class="column q-pa-lg custom-background">
+
+    <q-space />
 
     <q-card
       dark
