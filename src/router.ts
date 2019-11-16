@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import store from './store'
 import { IsAdmin } from './services/routeGuards'
 import DefaultLayout from './layouts/Default.vue'
-import Headlines from './views/headlines/Headlines.vue'
 import Highlights from './views/details/Highlights.vue'
 import Records from './views/records/Records.vue'
 import Sultans from './views/sultans/Sultans.vue'
@@ -24,11 +23,6 @@ export default new Router({
           path: '/',
           name: 'home',
           component: Home
-        },
-        {
-          path: '/headlines',
-          name: 'headlines',
-          component: Headlines
         },
         {
           path: '/highlights',

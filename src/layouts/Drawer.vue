@@ -53,19 +53,6 @@
       </q-item>
 
       <q-item
-        to="/headlines"
-        exact
-        @click="CloseDrawer"
-      >
-        <q-item-section avatar>
-          <q-icon name="dynamic_feed" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>Headlines</q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-item
         to="/highlights"
         exact
         @click="CloseDrawer"
