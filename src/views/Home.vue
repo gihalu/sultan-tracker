@@ -1,11 +1,10 @@
 <template>
   <q-page class="q-pa-lg custom-background">
-    <q-card class="text-h4 text-center bg-tinted text-accent">{{ welcomeMessage }}</q-card>
 
     <q-card
       dark
       bordered
-      class="bg-tinted text-white q-mt-md"
+      class="bg-tinted text-white"
     >
       <q-card-section>
         <div class="text-h6">Top growth this week</div>
@@ -76,7 +75,7 @@
 
 <style lang="stylus" scoped>
 .bg-tinted {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 .custom-background {
@@ -96,7 +95,7 @@ import { filter, find, map, slice, sortBy } from 'lodash'
 
 @Component
 export default class Home extends Vue {
-  private welcomeMessage = 'Welcome to the Gotham Elite Sultan Tracker';
+  private topGrowthCount = 3;
 
   @Getter isAdmin!: boolean;
   @Getter sultanDetailGrid!: SultanDetailRow[];
@@ -118,7 +117,7 @@ export default class Home extends Vue {
       return row.growth * -1
     })
 
-    return slice(sortedRows, 0, 5)
+    return slice(sortedRows, 0, this.topGrowthCount)
   }
 }
 </script>
