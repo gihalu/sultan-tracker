@@ -40,10 +40,5 @@ export default class DetailsGrid extends Vue {
       return assign(row, { detailRows: descendingDetails })
     })
   }
-
-  created () {
-    this.$store.dispatch('GetSummary')
-    this.$store.dispatch('GetTiers')
-  }
 }
 </script>

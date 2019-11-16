@@ -53,15 +53,28 @@
       </q-item>
 
       <q-item
-        to="/details"
+        to="/headlines"
         exact
         @click="CloseDrawer"
       >
         <q-item-section avatar>
-          <q-icon name="list" />
+          <q-icon name="dynamic_feed" />
         </q-item-section>
         <q-item-section>
-          <q-item-label>Details</q-item-label>
+          <q-item-label>Headlines</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        to="/highlights"
+        exact
+        @click="CloseDrawer"
+      >
+        <q-item-section avatar>
+          <q-icon name="view_list" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Highlights</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -118,11 +131,6 @@ export default class AppDrawer extends Vue {
 
   CloseDrawer () {
     this.$emit('close')
-  }
-
-  created () {
-    const actions: any = get(this, '$store.dispatch')
-    actions('GetSultans')
   }
 }
 </script>

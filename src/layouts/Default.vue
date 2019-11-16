@@ -64,5 +64,11 @@ export default class Layout extends Vue {
   get isAdmin () {
     return this.$store.getters.isAdmin
   }
+
+  created () {
+    this.$store.dispatch('GetSummary')
+    this.$store.dispatch('GetTiers')
+    this.$store.dispatch('GetSultans')
+  }
 }
 </script>

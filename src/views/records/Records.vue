@@ -29,10 +29,6 @@ export default Vue.extend({
   methods: {},
   components: {
     RecordsTable
-  },
-  created () {
-    this.$store.dispatch('GetSummary')
-    this.$store.dispatch('GetSultans')
   }
 })
 </script>

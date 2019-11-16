@@ -114,10 +114,5 @@ export default class report extends Vue {
   UpdateSelectedSultan (sultan: string) {
     this.$router.push(`/report/${sultan}`)
   }
-
-  created () {
-    this.$store.dispatch('GetSummary')
-    this.$store.dispatch('GetTiers')
-  }
 }
 </script>

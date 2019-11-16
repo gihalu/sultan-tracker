@@ -15,12 +15,12 @@ interface ActionParameters {
   state: SultanState
 }
 
-interface DetailRow {
+export interface DetailRow {
   current: boolean;
   date: string;
   growth: number | null;
   name: string;
-  promoted: false;
+  promoted: boolean;
   score: number;
   tier: string;
 }
