@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-lg custom-background">
-    <q-card class="text-h4 text-center bg-tinted text-accent text-weight-bold">{{ welcomeMessage }}</q-card>
+    <q-card class="text-h4 text-center bg-tinted text-accent">{{ welcomeMessage }}</q-card>
 
     <q-card
       dark
