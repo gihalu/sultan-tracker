@@ -34,7 +34,7 @@
     >
       <h6>
         <span v-if="loadingData">Loading data</span>
-        <span>Unfortunately, we could not find any recods for {{ sultan }}</span>
+        <span> Unfortunately, we could not find any records for {{ sultan }}</span>
       </h6>
     </div>
   </q-page>
@@ -61,7 +61,8 @@ export default class report extends Vue {
         {
           label: 'Strength',
           data: map(rows, row => {
-            return toNumber(row.score.replace(/,/g, ''))
+            const scoreString = get(row, 'score', '')
+            return toNumber(scoreString.replace(/,/g, ''))
           }),
           borderWidth: 1
         }
