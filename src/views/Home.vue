@@ -115,7 +115,7 @@ export default class Home extends Vue {
 
   get topGrowth () {
     const sortedRows = sortBy(this.currentDetails, (row: DetailRow) => {
-      if (!row.growth) return 0
+      if (!row || !row.growth) return 0
       return row.growth * -1
     })
 
