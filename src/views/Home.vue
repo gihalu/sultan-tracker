@@ -25,7 +25,7 @@
           :key="index"
           v-for="(details, index) in topGrowth"
         >
-          - {{ details.name }} grew by {{ details.growth }}
+          - {{ (details || {}).name }} grew by {{ (details || {}).growth }}
         </div>
 
       </q-card-section>

@@ -5,7 +5,7 @@
   >
     <q-card-section class="bg-grey-9 text-white q-pa-xs text-center">{{ details.date }}</q-card-section>
     <q-card-section class="q-mt-sm">
-      <div>Score: {{ details.score }}</div>
+      <div>Power: {{ details.score }}</div>
       <div>Growth: {{ details.growth }}</div>
       <div>Tier: {{ details.tier }}</div>
     </q-card-section>
