@@ -42,7 +42,7 @@ export interface SummaryRow {
 }
 
 class SummaryState {
-  range: string = 'data!A1:Z999';
+  range: string = 'data!A1:Z9999';
   summaryData: ValueRange | null = null;
 }
 
