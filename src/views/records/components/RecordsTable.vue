@@ -4,6 +4,7 @@
       title="Summary"
       :data="rows"
       :columns="columns"
+      :filter="filter"
       :loading="loading"
       :pagination.sync="pagination"
       row-key="key"
@@ -15,15 +16,29 @@
           flat
           label="New Records"
           @click="NewSummaryRecords"
-        /></template>
+        />
+        <q-space />
+        <q-input
+          borderless
+          dense
+          debounce="300"
+          v-model="filter"
+          placeholder="Search"
+        >
+          <q-icon
+            slot="append"
+            name="search"
+          />
+        </q-input>
+      </template>
     </q-table>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapActions } from 'vuex'
-import { get } from 'lodash'
+import Vue from 'vue';
+import { mapActions } from 'vuex';
+import { get, reverse } from 'lodash';
 
 export default Vue.extend({
   name: 'summary-table',
@@ -31,20 +46,21 @@ export default Vue.extend({
     columns: { required: true },
     rows: { required: true }
   },
-  data () {
+  data() {
     return {
+      filter: '',
       pagination: {
-        rowsPerPage: 10
+        rowsPerPage: 20
       }
-    }
+    };
   },
   computed: {
-    loading (): boolean {
-      return !get(this.columns, 'length') || !get(this.rows, 'length')
+    loading(): boolean {
+      return !get(this.columns, 'length') || !get(this.rows, 'length');
     }
   },
   methods: {
     ...mapActions(['NewSummaryRecords'])
   }
-})
+});
 </script>

@@ -9,26 +9,32 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { get, set } from 'lodash'
-import RecordsTable from './components/RecordsTable.vue'
+import Vue from 'vue';
+import { get, set, sortBy } from 'lodash';
+import RecordsTable from './components/RecordsTable.vue';
+import { summary } from '../../store/modules/summary';
 
 export default Vue.extend({
   name: 'Records',
   computed: {
-    columns (): any {
-      return this.$store.getters.summaryHeaders
+    columns(): any {
+      return this.$store.getters.summaryHeaders || [];
     },
-    isAdmin (): boolean {
-      return this.$store.getters.isAdmin
+    isAdmin(): boolean {
+      return this.$store.getters.isAdmin || false;
     },
-    rows (): any {
-      return this.$store.getters.summaryRows
+    rows(): any {
+      const rows: summary[] = this.$store.getters.summaryRows || [];
+      const currentDate = new Date();
+      return sortBy(rows, row => {
+        const date = new Date(row.date);
+        return currentDate.valueOf() - date.valueOf();
+      });
     }
   },
   methods: {},
   components: {
     RecordsTable
   }
-})
+});
 </script>

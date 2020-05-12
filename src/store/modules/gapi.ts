@@ -1,5 +1,5 @@
-import Vue from "vue";
-import { assign, fromPairs, includes, map, startCase } from "lodash";
+import Vue from 'vue'
+import { assign, fromPairs, includes, map, startCase } from 'lodash'
 
 export interface ValueRange {
   majorDimension: string;
@@ -16,10 +16,10 @@ interface User {
   name: string;
 }
 class GapiState {
-  admins: string[] = ["gihalu@gmail.com", "revfer1@gmail.com"];
+  admins: string[] = ['gihalu@gmail.com', 'revfer1@gmail.com'];
   apiUrl: string =
-    "https://sheets.googleapis.com/v4/spreadsheets/1ZkSo4IPVwFfqkSNp6ygJfTiL2J6QFg_mU4Srf_TNNvg";
-  range: string = "records!A1:Z999";
+    'https://sheets.googleapis.com/v4/spreadsheets/1ZkSo4IPVwFfqkSNp6ygJfTiL2J6QFg_mU4Srf_TNNvg';
+  range: string = 'records!A1:Z999';
   summaryData: ValueRange | null = null;
   user: User | null = null;
 }
@@ -31,70 +31,77 @@ interface ActionParameters {
   state: GapiState;
 }
 
-const state = new GapiState();
+export interface GapiColumn {
+  align: string;
+  field: string;
+  label: string;
+  name: string;
+}
+
+const state = new GapiState()
 
 const getters = {
-  columnsFromValues: () => (values: string[]) => {
+  columnsFromValues: () => (values: string[]): GapiColumn[] => {
     return map(values, (value, index) => {
       return {
-        align: "left",
+        align: 'left',
         field: value,
         label: index === 0 ? startCase(value) : value,
         name: value
-      };
-    });
+      }
+    })
   },
 
   gapi: () => Vue.prototype.$gapi,
 
   gapiUrl: (state: GapiState) => ({
-    path = "values",
+    path = 'values',
     parameters
   }: {
     path: string;
     parameters: string;
   }) => {
-    return `${state.apiUrl}/${path}/${encodeURI(parameters)}`;
+    return `${state.apiUrl}/${path}/${encodeURI(parameters)}`
   },
 
   isAdmin: (state: GapiState) => {
-    if (state.user === null) return false;
-    return includes(state.admins, state.user.email);
+    if (state.user === null) return false
+    return includes(state.admins, state.user.email)
   },
 
   isLoggedIn: (state: GapiState) => {
-    return Boolean(state.user);
+    return Boolean(state.user)
   },
 
   rowsFromValues: () => (values: string[][], columns: { field: string }[]) => {
     return map(values, (row, key) => {
       const rowDetails = fromPairs(
         map(row, (item, index) => {
-          return [columns[index]["field"], item];
+          return [columns[index]['field'], item]
         })
-      );
-      return assign({ key }, rowDetails);
-    });
+      )
+      return assign({ key }, rowDetails)
+    })
   },
 
   sheetsUrl: (state: GapiState) => (range: string) => {
-    return `${state.apiUrl}/values/${range}`;
+    return `${state.apiUrl}/values/${range}`
   },
 
   user: (state: GapiState): User | null => state.user
-};
+}
 
-const actions = {};
+const actions = {}
 
 const mutations = {
   SetUser: (state: GapiState, user: User) => {
-    state.user = user;
+    state.user = user
   }
-};
+}
 
 export default {
   state,
   getters,
   actions,
   mutations
-};
+}

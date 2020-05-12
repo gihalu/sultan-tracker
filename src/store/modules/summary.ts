@@ -4,20 +4,18 @@ import {
   concat,
   filter,
   find,
-  fromPairs,
   get,
   head,
   last,
   map,
   max,
   pick,
-  reverse,
   sortBy,
-  startCase,
+  sum,
   tail
 } from 'lodash'
 import { date } from 'quasar'
-import { ValueRange } from './gapi'
+import { ValueRange, GapiColumn } from './gapi'
 import Axios from 'axios'
 
 interface ActionParameters {
@@ -84,7 +82,7 @@ const getters = {
     const detailedRows = map(ascendingRows, (row, index) => {
       const growth = !index ? null : row.score - comparison.score
       comparison.score = row.score
-      const promoted = !index ? false : row.tier != comparison.tier
+      const promoted = !index ? false : row.tier !== comparison.tier
       comparison.tier = row.tier
       return assign({ growth, promoted }, row)
     })
@@ -118,7 +116,11 @@ const getters = {
   summaryHeaders: (state: SummaryState, getters: any) => {
     if (!state.summaryData) return
     const values = state.summaryData.values
-    return getters.columnsFromValues(head(values))
+    const headers: GapiColumn[] = getters.columnsFromValues(head(values))
+    return map(headers, header => {
+      const sortable = `${header.field}`.toLowerCase() !== 'date'
+      return assign({ sortable }, header)
+    })
   },
 
   summaryRows: (state: SummaryState, getters: any) => {
@@ -159,20 +161,25 @@ const actions = {
       'Please enter the date for these records',
       getters.summaryDateSuggestion
     )
-    if (!date) return
-    const newValues: any = compact(
+    if (!date || !state.summaryData) return
+
+    const newValues: any[][] = compact(
       map(sultans, sultan => {
         const active: boolean = Boolean(Number(sultan.active))
         if (!active) return
-        const score = prompt(
+        const score: string | null = prompt(
           `Please enter the score for ${sultan.name}`,
           getters.latestScoreBySultan(sultan.name)
         )
         return [sultan.name, date, score]
       })
     )
-    if (!state.summaryData) return
-    const newSummaryValues = concat(state.summaryData.values, newValues)
+
+    const tupEstimate = sum(map(newValues, row => {
+      return row[2] === null ? 0 : Number(row[2].replace(/,/g, ''))
+    })) / 1000
+    const tup = prompt('Please enter the Total Union Power', `${tupEstimate}`)
+    const newSummaryValues = concat(state.summaryData.values, newValues, [['TUP', date, tup]])
     commit('SetSummary', newSummaryValues)
     dispatch('UpdateSummary')
   },
