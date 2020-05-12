@@ -5,6 +5,7 @@ import '@quasar/extras/roboto-font/roboto-font.css'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/ionicons-v4/ionicons-v4.css'
 import {
+  Notify,
   Quasar,
   QAvatar,
   QBtn,
@@ -80,5 +81,7 @@ Vue.use(Quasar, {
   directives: {
     Ripple
   },
-  plugins: {}
+  plugins: {
+    Notify
+  }
 })

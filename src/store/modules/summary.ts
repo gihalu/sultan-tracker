@@ -181,7 +181,7 @@ const actions = {
     const tup = prompt('Please enter the Total Union Power', `${tupEstimate}`)
     const newSummaryValues = concat(state.summaryData.values, newValues, [['TUP', date, tup]])
     commit('SetSummary', newSummaryValues)
-    dispatch('UpdateSummary')
+    return dispatch('UpdateSummary')
   },
 
   UpdateSummary: ({ state, getters }: ActionParameters) => {
@@ -195,7 +195,10 @@ const actions = {
         body: state.summaryData
       })
       .then((response: any) => console.log({ response }))
-      .catch((error: any) => console.error({ error }))
+      .catch((error: any) => {
+        console.error({ error })
+        return Promise.reject(error.result ? error.result.error ? error.result.error.message : error.result : null)
+      })
   }
 }
 

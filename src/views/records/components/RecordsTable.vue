@@ -14,9 +14,15 @@
           class="q-mb-md"
           color="primary"
           flat
-          label="New Records"
-          @click="NewSummaryRecords"
-        />
+          :loading='saving'
+          @click="NewRecords"
+        >
+          New Records
+          <template v-slot:loading>
+            Saving
+            <q-spinner-hourglass class="q-ml-sm" />
+          </template>
+        </q-btn>
         <q-space />
         <q-input
           borderless
@@ -39,28 +45,53 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { get, reverse } from 'lodash';
+import { Action } from 'vuex-class';
+import { Prop, Component } from 'vue-property-decorator';
+import { summary } from '../../../store/modules/summary';
 
-export default Vue.extend({
-  name: 'summary-table',
-  props: {
-    columns: { required: true },
-    rows: { required: true }
-  },
-  data() {
-    return {
-      filter: '',
-      pagination: {
-        rowsPerPage: 20
-      }
-    };
-  },
-  computed: {
-    loading(): boolean {
-      return !get(this.columns, 'length') || !get(this.rows, 'length');
-    }
-  },
-  methods: {
-    ...mapActions(['NewSummaryRecords'])
+interface Notification {
+  color: 'negative' | 'positive';
+  message: string;
+  position: 'center';
+}
+
+@Component
+export default class SummaryTable extends Vue {
+  @Prop({ required: true }) columns!: string[][];
+  @Prop({ required: true }) rows!: summary[];
+
+  private filter: string = '';
+  private notification: Notification = {
+    color: 'negative',
+    message: 'Update failed',
+    position: 'center'
+  };
+  private pagination = {
+    rowsPerPage: 20
+  };
+  private saving: boolean = false;
+
+  get loading(): boolean {
+    return !get(this.columns, 'length') || !get(this.rows, 'length');
   }
-});
+
+  @Action NewSummaryRecords!: Function;
+
+  NewRecords() {
+    this.saving = true;
+    this.NewSummaryRecords()
+      .then((response: any) => {
+        this.notification.color = 'positive';
+        this.notification.message = 'Spreadsheet successfully updated';
+      })
+      .catch((error: any) => {
+        this.notification.color = 'negative';
+        this.notification.message = `Spreadsheet could not be updated (${error})`;
+      })
+      .then(() => {
+        this.$q.notify(this.notification);
+        this.saving = false;
+      });
+  }
+}
 </script>
