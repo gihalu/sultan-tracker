@@ -184,16 +184,10 @@ const actions = {
     return dispatch('UpdateSummary')
   },
 
-  UpdateSummary: ({ state, getters }: ActionParameters) => {
-    return getters.gapi
-      .request({
-        path: getters.gapiUrl({ parameters: state.range }),
-        method: 'PUT',
-        params: {
-          valueInputOption: 'RAW'
-        },
-        body: state.summaryData
-      })
+  UpdateSummary: ({ state, getters, rootGetters }: ActionParameters) => {
+    const authorization = rootGetters["serviceAccount/authorization"]
+    const url = `${rootGetters.sheetsUrl(state.range)}?valueInputOption=RAW`
+    return Axios.put(url, state.summaryData, { headers: { authorization } })
       .then((response: any) => console.log({ response }))
       .catch((error: any) => {
         console.error({ error })

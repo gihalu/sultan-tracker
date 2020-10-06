@@ -18,7 +18,7 @@ interface User {
 class GapiState {
   admins: string[] = ['gihalu@gmail.com', 'revfer1@gmail.com'];
   apiUrl: string =
-    'https://sheets.googleapis.com/v4/spreadsheets/1ZkSo4IPVwFfqkSNp6ygJfTiL2J6QFg_mU4Srf_TNNvg';
+    'https://sheets.googleapis.com/v4/spreadsheets/14-Xp1fG8-dM7pm5GBU7THK-N_avd8Ql7cJjZld42n1E';
   range: string = 'records!A1:Z999';
   summaryData: ValueRange | null = null;
   user: User | null = null;
